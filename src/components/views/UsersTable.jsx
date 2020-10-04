@@ -1,7 +1,9 @@
 import React, { useMemo, useCallback } from "react";
 import { useHistory } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 
 import Table from "components/common/Table";
+import { currentUserState } from "store/github";
 
 export default ({ users }) => {
   const columns = useMemo(
@@ -34,12 +36,16 @@ export default ({ users }) => {
     []
   );
 
+  const setCurrentUser = useSetRecoilState(currentUserState);
+
   const history = useHistory();
   const navigateToUser = useCallback(
     ({ login }) => {
+      const user = users.find((u) => u.login === login);
+      setCurrentUser(user);
       history.push(`/user/${login}`);
     },
-    [history]
+    [users, setCurrentUser, history]
   );
 
   return <Table columns={columns} data={users} navigateTo={navigateToUser} />;

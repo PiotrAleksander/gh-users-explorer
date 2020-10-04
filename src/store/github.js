@@ -1,10 +1,20 @@
 import { atom, selector, selectorFamily } from 'recoil';
 
-import { fetchOrganization, fetchRepository, fetchUserRepositories } from 'api/github';
+import { fetchOrganization, fetchRepository, fetchUserRepository, fetchUserRepositories, fetchUser } from 'api/github';
 
-const currentOrganization = atom({
-    key: 'CurrentOrganization',
+const currentOrganizationState = atom({
+    key: 'CurrentOrganizationState',
     default: 'Angular',
+});
+
+export const currentUserState = atom({
+    key: 'CurrentUserState',
+    default: undefined,
+});
+
+export const currentRepositoryState = atom({
+    key: 'CurrentRepositoryState',
+    default: undefined,
 });
 
 const hashMapToArray = (byLogin, allLogins) => allLogins.map(login => byLogin[login]);
@@ -14,7 +24,7 @@ const setItemInLocalStorage = (key, item) => localStorage.setItem(key, JSON.stri
 export const organizationQuery = selector({
     key: 'CurrentOrganizationQuery',
     get: async ({ get }) => {
-        const organisation = get(currentOrganization);
+        const organisation = get(currentOrganizationState);
         const usersPerOrganisation = localStorage.getItem(organisation);
         if (usersPerOrganisation) {
             return JSON.parse(usersPerOrganisation);
@@ -28,16 +38,24 @@ export const organizationQuery = selector({
 
 export const repositoryQuery = selectorFamily({
     key: 'RepositoryQuery',
-    get: repo => async ({ get }) => {
-        const { byLogin, allLogins } = await fetchRepository(get(currentOrganization), repo);
+    get: ({ owner, name }) => async ({ get }) => {
+        let currentRepository = get(currentRepositoryState);
+        if (!currentRepository && owner && name) {
+            currentRepository = await fetchRepository(owner, name);
+        }
+        const { byLogin, allLogins } = await fetchUserRepository(currentRepository.contributors_url);
         return hashMapToArray(byLogin, allLogins);
     },
 })
 
 export const userQuery = selectorFamily({
     key: 'UserQuery',
-    get: repos_url => async ({ get }) => {
-        const repositories = await fetchUserRepositories(repos_url);
+    get: login => async ({ get }) => {
+        let currentUser = get(currentUserState);
+        if (!currentUser && login) {
+            currentUser = await fetchUser(login);
+        }
+        const repositories = await fetchUserRepositories(currentUser.repos_url);
         return repositories
     },
 });

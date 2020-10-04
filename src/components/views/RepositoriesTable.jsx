@@ -1,7 +1,10 @@
 import React, { useMemo, useCallback } from "react";
+import { useSetRecoilState } from "recoil";
+import { useHistory } from "react-router-dom";
 
 import Table from "components/common/Table";
-import { useHistory } from "react-router-dom";
+import { currentRepositoryState, currentUserState } from "store/github";
+import { useRecoilValue } from "recoil";
 
 export default ({ repositories }) => {
   const columns = useMemo(
@@ -9,23 +12,41 @@ export default ({ repositories }) => {
       {
         Header: "Name",
         accessor: "name",
-        sortType: "basic",
       },
       {
         Header: "Description",
         accessor: "description",
+      },
+      {
+        Header: "Stars",
+        accessor: "stargazers_count",
+        sortType: "basic",
+      },
+      {
+        Header: "Watchers",
+        accessor: "watchers_count",
+        sortType: "basic",
+      },
+      {
+        Header: "Forks",
+        accessor: "forks_count",
         sortType: "basic",
       },
     ],
     []
   );
 
+  const setCurrentRepository = useSetRecoilState(currentRepositoryState);
+  const currentUser = useRecoilValue(currentUserState);
+
   const history = useHistory();
   const navigateToRepository = useCallback(
     ({ name }) => {
-      history.push(`/repository/:name`);
+      const repository = repositories.find((r) => r.name === name);
+      setCurrentRepository(repository);
+      history.push(`/repository/${currentUser.login}/${name}`);
     },
-    [history]
+    [repositories, setCurrentRepository, history, currentUser]
   );
 
   return (

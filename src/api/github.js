@@ -10,6 +10,16 @@ const api = axios.create({
 
 const baseUrl = 'https://api.github.com';
 
+export const fetchUser = async (login) => {
+    const { data: user } = await api.get(`${baseUrl}/users/${login}`);
+    return user;
+}
+
+export const fetchRepository = async (owner, name) => {
+    const { data: repository } = await api.get(`${baseUrl}/repos/${owner}/${name}`);
+    return repository;
+}
+
 const getUsersState = async (usersCollection) => {
     let byLogin = {};
     let allLogins = [];
@@ -19,12 +29,13 @@ const getUsersState = async (usersCollection) => {
         return api.get(url);
     }));
 
-    users.forEach(({ data: { login, public_repos, public_gists, followers } }) => {
+    users.forEach(({ data: { login, public_repos, public_gists, followers, repos_url } }) => {
         byLogin[login] = {
             ...byLogin[login],
             public_repos,
             public_gists,
-            followers
+            followers,
+            repos_url
         }
     });
 
@@ -43,11 +54,28 @@ export const fetchOrganization = async (org = 'Angular') => {
 
 export const fetchUserRepositories = async (repos_url) => {
     const { data: repositories } = await api.get(repos_url);
-    return repositories.map(({ url, name, description }) => ({ url, name, description }));
+    return repositories.map(({
+        avatar_url,
+        url,
+        name,
+        description,
+        contributors_url,
+        stargazers_count,
+        watchers_count,
+        forks_count
+    }) => ({
+        avatar_url,
+        url,
+        name,
+        description,
+        contributors_url,
+        stargazers_count,
+        watchers_count,
+        forks_count
+    }));
 }
 
-export const fetchRepository = async (owner, repo) => {
-    const { data: { contributors_url } } = await api.get(`${baseUrl}/repos/${owner}/${repo}`);
+export const fetchUserRepository = async (contributors_url) => {
     const { data: users } = await api.get(contributors_url);
 
     return getUsersState(users);
