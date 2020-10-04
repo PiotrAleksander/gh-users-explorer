@@ -10,47 +10,45 @@ const api = axios.create({
 
 const baseUrl = 'https://api.github.com';
 
-export const fetchOrganization = async (org = 'Angular') => {
-    const { data: { repos_url } } = await api.get(`${baseUrl}/orgs/${org}`);
-    const { data: repositories } = await api.get(repos_url);
-    const usersPerRepositoryData = await axios.all(repositories.map(({ contributors_url }) => api.get(contributors_url)));
-    const usersPerRepositoryRaw = usersPerRepositoryData.flatMap(({ data }) => data);
-    const usersPerRepository = uniqBy('id')(usersPerRepositoryRaw);
-    let usersMap = {};
-    const users = await axios.all(usersPerRepository.map(({ login, contributions, url }) => {
-        usersMap[login] = { contributions };
+const getUsersState = async (usersCollection) => {
+    let byLogin = {};
+    let allLogins = [];
+    const users = await axios.all(usersCollection.map(({ login, contributions, url }) => {
+        byLogin[login] = { login, contributions };
+        allLogins.push(login);
         return api.get(url);
     }));
 
     users.forEach(({ data: { login, public_repos, public_gists, followers } }) => {
-        usersMap[login] = {
-            ...usersMap[login],
+        byLogin[login] = {
+            ...byLogin[login],
             public_repos,
             public_gists,
             followers
         }
     });
 
-    return usersMap;
+    return { byLogin, allLogins };
+}
+
+export const fetchOrganization = async (org = 'Angular') => {
+    const { data: { repos_url } } = await api.get(`${baseUrl}/orgs/${org}`);
+    const { data: repositories } = await api.get(repos_url);
+    const usersPerRepositoryDataNested = await axios.all(repositories.map(({ contributors_url }) => api.get(contributors_url)));
+    const usersPerRepositoryData = usersPerRepositoryDataNested.flatMap(({ data }) => data)
+    const usersPerRepository = uniqBy('id')(usersPerRepositoryData);
+
+    return getUsersState(usersPerRepository);
+}
+
+export const fetchUserRepositories = async (repos_url) => {
+    const { data: repositories } = await api.get(repos_url);
+    return repositories.map(({ url, name, description }) => ({ url, name, description }));
 }
 
 export const fetchRepository = async (owner, repo) => {
     const { data: { contributors_url } } = await api.get(`${baseUrl}/repos/${owner}/${repo}`);
-    const { data: contributors } = await api.get(contributors_url);
-    let contributorsMap = {};
-    const users = await axios.all(contributors.map(({ login, contributions, url }) => {
-        contributorsMap[login] = { contributions };
-        return api.get(url);
-    }));
+    const { data: users } = await api.get(contributors_url);
 
-    users.forEach(({ data: { login, public_repos, public_gists, followers } }) => {
-        contributorsMap[login] = {
-            ...contributorsMap[login],
-            public_repos,
-            public_gists,
-            followers
-        }
-    });
-
-    return contributorsMap;
+    return getUsersState(users);
 }

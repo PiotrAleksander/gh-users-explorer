@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@octokit/rest": "^18.0.6",
+    "@primer/components": "^20.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -14,7 +15,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-table": "^7.5.2",
-    "recoil": "^0.0.13"
+    "recoil": "^0.0.13",
+    "styled-components": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
