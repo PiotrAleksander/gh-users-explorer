@@ -5,11 +5,12 @@ import { ThemeProvider } from 'styled-components'
 import { theme, Pagehead } from '@primer/components'
 
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import Organization from 'components/containers/Organization';
-import User from 'components/containers/User';
-import './App.css';
-import Repository from 'components/containers/Repository';
 import Navbar from 'components/containers/Navbar';
+import './App.css';
+
+const Organization = React.lazy(() => import('components/containers/Organization'));
+const User = React.lazy(() => import('components/containers/User'));
+const Repository = React.lazy(() => import('components/containers/Repository'));
 
 function App() {
   return (
@@ -23,18 +24,12 @@ function App() {
               </header>
             </NavLink>
             <main>
+              <Navbar />
               <Suspense fallback={<div>Loading...</div>}>
-                <Navbar />
                 <Switch>
-                  <Route exact path="/">
-                    <Organization />
-                  </Route>
-                  <Route path="/user/:login">
-                    <User />
-                  </Route>
-                  <Route path="/repository/:owner/:name">
-                    <Repository />
-                  </Route>
+                  <Route exact path="/" component={Organization} />
+                  <Route path="/user/:login" component={User} />
+                  <Route path="/repository/:owner/:name" component={Repository} />
                 </Switch>
               </Suspense>
             </main>
