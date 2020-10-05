@@ -1,9 +1,16 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
+
 import App from './App';
 
-test('renders GH Users Explorer paragraph', () => {
-  const { getByText } = render(<App />);
-  const paragraphElement = getByText(/GH Users Explorer/i);
-  expect(paragraphElement).toBeInTheDocument();
-});
+describe('App', () => {
+  test('renders GH Users Explorer paragraph', () => {
+    render(<App />);
+    const paragraphElement = screen.getByText(/GH Users Explorer/i);
+    expect(paragraphElement).toBeInTheDocument();
+  });
+
+  test.skip('', async () => {
+    render(<App />);
+  });
+})
