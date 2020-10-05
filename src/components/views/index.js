@@ -4,6 +4,7 @@ import RepositoriesTable from './RepositoriesTable';
 import RepositoryView from './RepositoryView';
 import UsersTable from './UsersTable';
 import UserView from './UserView';
+import SearchInputView from './SearchInputView';
 
 export {
     NavbarView,
@@ -11,5 +12,6 @@ export {
     RepositoriesTable,
     RepositoryView,
     UsersTable,
-    UserView
+    UserView,
+    SearchInputView
 }

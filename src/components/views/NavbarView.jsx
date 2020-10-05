@@ -5,7 +5,7 @@ import { SubNav } from "@primer/components";
 import "./NavbarView.css";
 
 export default ({ history }) => (
-  <SubNav m={2} p={4} aria-label="Main">
+  <SubNav aria-label="Main">
     <SubNav.Links>
       <SubNav.Link to="/" as={NavLink}>
         Home

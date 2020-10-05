@@ -2,7 +2,7 @@ import { atom, selector, selectorFamily } from 'recoil';
 
 import { fetchOrganization, fetchRepository, fetchUserRepository, fetchUserRepositories, fetchUser } from 'api/github';
 
-const currentOrganizationState = atom({
+export const currentOrganizationState = atom({
     key: 'CurrentOrganizationState',
     default: 'Angular',
 });
@@ -29,10 +29,14 @@ export const organizationQuery = selector({
         if (usersPerOrganisation) {
             return JSON.parse(usersPerOrganisation);
         }
-        const { byLogin, allLogins } = await fetchOrganization(organisation);
-        const usersMap = hashMapToArray(byLogin, allLogins);
-        setItemInLocalStorage(organisation, usersMap);
-        return usersMap;
+        try {
+            const { byLogin, allLogins } = await fetchOrganization(organisation);
+            const usersMap = hashMapToArray(byLogin, allLogins);
+            setItemInLocalStorage(organisation, usersMap);
+            return usersMap;
+        } finally {
+            return [];
+        }
     },
 });
 

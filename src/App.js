@@ -2,10 +2,10 @@ import React, { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { BrowserRouter, NavLink, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components'
-import { theme, Pagehead } from '@primer/components'
+import { theme, Pagehead, Box, Flex } from '@primer/components'
 
 import { ErrorBoundary, Loader } from 'components/common';
-import { Navbar } from 'components/containers';
+import { Navbar, SearchInput } from 'components/containers';
 import './App.css';
 
 const Organization = React.lazy(() => import('components/containers/Organization'));
@@ -24,7 +24,15 @@ function App() {
               </header>
             </NavLink>
             <main>
-              <Navbar />
+              <Box m={2} p={4}>
+                <Flex>
+                  <Box>
+                    <Navbar />
+                  </Box>
+                  <Box>
+                    <SearchInput />
+                  </Box></Flex>
+              </Box>
               <Suspense fallback={<Loader />}>
                 <Switch>
                   <Route exact path="/" component={Organization} />
