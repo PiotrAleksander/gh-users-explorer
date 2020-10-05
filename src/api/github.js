@@ -29,9 +29,17 @@ const getUsersState = async (usersCollection) => {
         return api.get(url);
     }));
 
-    users.forEach(({ data: { login, public_repos, public_gists, followers, repos_url } }) => {
+    users.forEach(({ data: {
+        login,
+        public_repos,
+        public_gists,
+        followers,
+        repos_url,
+        avatar_url,
+    } }) => {
         byLogin[login] = {
             ...byLogin[login],
+            avatar_url,
             public_repos,
             public_gists,
             followers,
@@ -55,7 +63,6 @@ export const fetchOrganization = async (org = 'Angular') => {
 export const fetchUserRepositories = async (repos_url) => {
     const { data: repositories } = await api.get(repos_url);
     return repositories.map(({
-        avatar_url,
         url,
         name,
         description,
@@ -64,7 +71,6 @@ export const fetchUserRepositories = async (repos_url) => {
         watchers_count,
         forks_count
     }) => ({
-        avatar_url,
         url,
         name,
         description,

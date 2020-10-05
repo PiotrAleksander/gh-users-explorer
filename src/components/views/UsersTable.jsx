@@ -9,6 +9,13 @@ export default ({ users }) => {
   const columns = useMemo(
     () => [
       {
+        Header: "Avatar",
+        accessor: "avatar_url",
+        Cell: ({ row }) => (
+          <img src={row.values.avatar_url} alt="User's avatar" />
+        ),
+      },
+      {
         Header: "Login",
         accessor: "login",
       },
