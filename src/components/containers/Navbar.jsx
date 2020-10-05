@@ -1,4 +1,4 @@
-import NavbarView from "components/views/NavbarView";
+import { NavbarView } from "components/views";
 import React from "react";
 import { useHistory } from "react-router-dom";
 

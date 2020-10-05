@@ -4,8 +4,8 @@ import { BrowserRouter, NavLink, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components'
 import { theme, Pagehead } from '@primer/components'
 
-import ErrorBoundary from 'components/common/ErrorBoundary';
-import Navbar from 'components/containers/Navbar';
+import { ErrorBoundary, Loader } from 'components/common';
+import { Navbar } from 'components/containers';
 import './App.css';
 
 const Organization = React.lazy(() => import('components/containers/Organization'));
@@ -25,7 +25,7 @@ function App() {
             </NavLink>
             <main>
               <Navbar />
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loader />}>
                 <Switch>
                   <Route exact path="/" component={Organization} />
                   <Route path="/user/:login" component={User} />

@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex } from "@primer/components";
 
-import RepositoriesTable from "components/views/RepositoriesTable";
+import { RepositoriesTable } from "components/views";
 
 export default ({ repositories }) => {
   return (

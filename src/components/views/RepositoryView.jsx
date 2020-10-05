@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex } from "@primer/components";
 
-import UsersTable from "components/views/UsersTable";
+import { UsersTable } from "components/views";
 
 export default ({ users }) => {
   return (

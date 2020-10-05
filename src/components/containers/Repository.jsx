@@ -2,7 +2,7 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 
 import { repositoryQuery } from "store/github";
-import RepositoryView from "components/views/RepositoryView";
+import { RepositoryView } from "components/views";
 import { useParams } from "react-router-dom";
 
 export default () => {
