@@ -38,6 +38,7 @@ function App() {
                   <Route exact path="/" component={Organization} />
                   <Route path="/user/:login" component={User} />
                   <Route path="/repository/:owner/:name" component={Repository} />
+                  <Route path="/:organization" component={Organization} />
                 </Switch>
               </Suspense>
             </main>

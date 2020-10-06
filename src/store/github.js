@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from 'recoil';
+import { atom, selectorFamily } from 'recoil';
 
 import { fetchOrganization, fetchRepository, fetchUserRepository, fetchUserRepositories, fetchUser } from 'api/github';
 
@@ -21,18 +21,18 @@ const hashMapToArray = (byLogin, allLogins) => allLogins.map(login => byLogin[lo
 
 const setItemInLocalStorage = (key, item) => localStorage.setItem(key, JSON.stringify(item));
 
-export const organizationQuery = selector({
+export const organizationQuery = selectorFamily({
     key: 'CurrentOrganizationQuery',
-    get: async ({ get }) => {
-        const organisation = get(currentOrganizationState);
-        const usersPerOrganisation = localStorage.getItem(organisation);
+    get: org => async ({ get }) => {
+        const organization = org || get(currentOrganizationState);
+        const usersPerOrganisation = localStorage.getItem(organization);
         if (usersPerOrganisation) {
             return JSON.parse(usersPerOrganisation);
         }
         try {
-            const { byLogin, allLogins } = await fetchOrganization(organisation);
+            const { byLogin, allLogins } = await fetchOrganization(organization);
             const usersMap = hashMapToArray(byLogin, allLogins);
-            setItemInLocalStorage(organisation, usersMap);
+            setItemInLocalStorage(organization, usersMap);
             return usersMap;
         } catch {
             return [];
