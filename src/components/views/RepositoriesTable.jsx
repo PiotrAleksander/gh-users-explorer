@@ -21,16 +21,19 @@ export default ({ repositories }) => {
         Header: "Stars",
         accessor: "stargazers_count",
         sortType: "basic",
+        sortDescFirst: true,
       },
       {
         Header: "Watchers",
         accessor: "watchers_count",
         sortType: "basic",
+        sortDescFirst: true,
       },
       {
         Header: "Forks",
         accessor: "forks_count",
         sortType: "basic",
+        sortDescFirst: true,
       },
     ],
     []

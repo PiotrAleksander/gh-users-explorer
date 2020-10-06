@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 
-import Table from "components/common/Table";
+import { Table } from "components/common";
 import { currentUserState } from "store/github";
 
 export default ({ users }) => {
@@ -23,21 +23,25 @@ export default ({ users }) => {
         Header: "Contributions",
         accessor: "contributions",
         sortType: "basic",
+        sortDescFirst: true,
       },
       {
         Header: "Followers",
         accessor: "followers",
         sortType: "basic",
+        sortDescFirst: true,
       },
       {
         Header: "Public repositories",
         accessor: "public_repos",
         sortType: "basic",
+        sortDescFirst: true,
       },
       {
         Header: "Public gists",
         accessor: "public_gists",
         sortType: "basic",
+        sortDescFirst: true,
       },
     ],
     []
