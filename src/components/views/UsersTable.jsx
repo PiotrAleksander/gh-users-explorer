@@ -14,10 +14,12 @@ export default ({ users }) => {
         Cell: ({ row }) => (
           <img src={row.values.avatar_url} alt="User's avatar" />
         ),
+        disableSortBy: true,
       },
       {
         Header: "Login",
         accessor: "login",
+        disableSortBy: true,
       },
       {
         Header: "Contributions",

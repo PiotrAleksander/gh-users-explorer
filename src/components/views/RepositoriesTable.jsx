@@ -12,10 +12,12 @@ export default ({ repositories }) => {
       {
         Header: "Name",
         accessor: "name",
+        disableSortBy: true,
       },
       {
         Header: "Description",
         accessor: "description",
+        disableSortBy: true,
       },
       {
         Header: "Stars",
