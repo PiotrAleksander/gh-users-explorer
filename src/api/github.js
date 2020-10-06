@@ -23,7 +23,9 @@ export const fetchRepository = async (owner, name) => {
 const getUsersState = async (usersCollection) => {
     let byLogin = {};
     let allLogins = [];
-    const users = await axios.all(usersCollection.map(({ login, contributions, url }) => {
+    const users = await axios.all(usersCollection.map(user => {
+        if (!user) return Promise.resolve({ data: {} });
+        const { login, contributions, url } = user;
         byLogin[login] = { login, contributions };
         allLogins.push(login);
         return api.get(url);

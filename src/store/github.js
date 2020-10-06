@@ -34,7 +34,8 @@ export const organizationQuery = selectorFamily({
             const usersMap = hashMapToArray(byLogin, allLogins);
             setItemInLocalStorage(organization, usersMap);
             return usersMap;
-        } catch {
+        } catch (error) {
+            console.error(error)
             return [];
         }
     },
