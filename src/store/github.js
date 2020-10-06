@@ -34,7 +34,7 @@ export const organizationQuery = selector({
             const usersMap = hashMapToArray(byLogin, allLogins);
             setItemInLocalStorage(organisation, usersMap);
             return usersMap;
-        } finally {
+        } catch {
             return [];
         }
     },
